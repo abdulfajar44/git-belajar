@@ -26,12 +26,12 @@ jobs:
           fi
 
           # Buat direktori khusus untuk NIM jika belum ada
-          if [ ! -d "/var/www/html/cicd/2305043" ]; then
-            mkdir -p /var/www/html/cicd/2305043
+          if [ ! -d "/var/www/html/cicd/2305043-fajar" ]; then
+            mkdir -p /var/www/html/cicd/2305043-fajar
           fi
 
           # Masuk ke folder NIM
-          cd /var/www/html/cicd/2305043
+          cd /var/www/html/cicd/2305043-fajar
 
           # Jika belum terhubung git, clone repo-nya
           if [ ! -d ".git" ]; then
@@ -41,4 +41,4 @@ jobs:
           fi
 
           # Set permission agar bisa diakses web server
-          chmod -R 755 /var/www/html/cicd/2305043
+          chmod -R 755 /var/www/html/cicd/2305043-fajar
