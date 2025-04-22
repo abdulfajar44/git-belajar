@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 64000
+        script: |
+          # Buat direktori utama cicd jika belum ada
+          if [ ! -d "/var/www/html/cicd" ]; then
+            mkdir -p /var/www/html/cicd
+          fi
+
+          # Buat direktori khusus untuk NIM jika belum ada
+          if [ ! -d "/var/www/html/cicd/2305043" ]; then
+            mkdir -p /var/www/html/cicd/2305043
+          fi
+
+          # Masuk ke folder NIM
+          cd /var/www/html/cicd/2305043
+
+          # Jika belum terhubung git, clone repo-nya
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/${{ github.repository }}.git .
+          else
+            git pull origin main
+          fi
+
+          # Set permission agar bisa diakses web server
+          chmod -R 755 /var/www/html/cicd/2305043
